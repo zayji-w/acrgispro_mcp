@@ -1,0 +1,11 @@
+[
+ {"name":"legacy_query","ok":true,"request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"map_state","expires":1020}},
+ {"name":"chinese_path","ok":true,"request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"describe_dataset","expires":1020,"protocol_version":2,"args":{"path":"D:\\中文 空格\\测试.shp","include_count":true}}},
+ {"name":"wrong_token","ok":false,"code":"UNAUTHORIZED","request":{"id":"0123456789abcdef0123456789abcdef","token":"bad","op":"version","expires":1020}},
+ {"name":"expired","ok":false,"code":"REQUEST_EXPIRED","request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"version","expires":999}},
+ {"name":"extra_code","ok":false,"code":"INVALID_ARGUMENT","request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"version","expires":1020,"code":"pass"}},
+ {"name":"unknown_operation","ok":false,"code":"UNKNOWN_OPERATION","request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"execute_python","expires":1020,"protocol_version":2,"args":{}}},
+ {"name":"unknown_argument","ok":false,"code":"INVALID_ARGUMENT","request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"describe_dataset","expires":1020,"protocol_version":2,"args":{"path":"D:\\x.shp","code":"pass"}}},
+ {"name":"boolean_expiry","ok":false,"code":"REQUEST_EXPIRED","request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"version","expires":true}},
+ {"name":"protocol_mismatch","ok":false,"code":"PROTOCOL_MISMATCH","request":{"id":"0123456789abcdef0123456789abcdef","token":"test-token","op":"version","expires":1020,"protocol_version":3,"args":{}}}
+]

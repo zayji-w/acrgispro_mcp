@@ -1,0 +1,588 @@
+{
+  "catalog_version": 2,
+  "runtime": {
+    "max_parameters": 24,
+    "max_inputs": 8,
+    "default_attach": true
+  },
+  "tools": {
+    "analysis.Clip": {
+      "label": "裁剪 Clip",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "clip_features", "out_feature_class", "cluster_tolerance"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "clip_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "裁剪边界（面）"},
+        "output_name": {"type": "output_name", "required": false, "default": "clip"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"param": "clip_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "clip"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": true
+    },
+    "analysis.PairwiseClip": {
+      "label": "裁剪 Pairwise Clip",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "clip_features", "out_feature_class", "cluster_tolerance", "precision"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "clip_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "裁剪边界（面）"},
+        "output_name": {"type": "output_name", "required": false, "default": "clip"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"param": "clip_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "clip"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": true
+    },
+    "analysis.Buffer": {
+      "label": "缓冲 Buffer",
+      "category": "proximity",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "buffer_distance_or_field", "line_side", "line_end_type", "dissolve_option", "dissolve_field", "method"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "distance": {"type": "distance", "required": true, "min": 0, "max": 1000000, "label": "缓冲距离"},
+        "unit": {"type": "unit", "required": false, "default": "Meters", "values": ["Meters", "Kilometers", "Feet", "Miles", "Yards", "NauticalMiles", "Millimeters", "Centimeters", "Decimeters", "Inches", "Points", "DecimalDegrees"], "label": "距离单位"},
+        "line_side": {"type": "enum", "required": false, "default": "FULL", "values": ["FULL", "LEFT", "RIGHT", "OUTSIDE_ONLY"], "label": "线侧"},
+        "line_end_type": {"type": "enum", "required": false, "default": "ROUND", "values": ["ROUND", "FLAT"], "label": "线端类型"},
+        "dissolve_option": {"type": "enum", "required": false, "default": "NONE", "values": ["NONE", "ALL", "LIST"], "label": "融合选项"},
+        "dissolve_field": {"type": "field_list", "dataset_param": "input_path", "required": false, "max_items": 8, "required_if": {"dissolve_option": ["LIST"]}, "label": "融合字段"},
+        "method": {"type": "enum", "required": false, "default": "PLANAR", "values": ["PLANAR", "GEODESIC"], "label": "缓冲方法"},
+        "output_name": {"type": "output_name", "required": false, "default": "buffer"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"distance_unit": true},
+        {"param": "line_side"},
+        {"param": "line_end_type"},
+        {"param": "dissolve_option"},
+        {"param": "dissolve_field"},
+        {"param": "method"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "buffer"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "analysis.PairwiseBuffer": {
+      "label": "缓冲 Pairwise Buffer",
+      "category": "proximity",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "buffer_distance_or_field", "dissolve_option", "dissolve_field", "method", "max_deviation"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "distance": {"type": "distance", "required": true, "min": 0, "max": 1000000, "label": "缓冲距离"},
+        "unit": {"type": "unit", "required": false, "default": "Meters", "values": ["Meters", "Kilometers", "Feet", "Miles", "Yards", "NauticalMiles", "Millimeters", "Centimeters", "Decimeters", "Inches", "Points", "DecimalDegrees"], "label": "距离单位"},
+        "dissolve_option": {"type": "enum", "required": false, "default": "NONE", "values": ["NONE", "ALL", "LIST"], "label": "融合选项"},
+        "dissolve_field": {"type": "field_list", "dataset_param": "input_path", "required": false, "max_items": 8, "required_if": {"dissolve_option": ["LIST"]}, "label": "融合字段"},
+        "method": {"type": "enum", "required": false, "default": "PLANAR", "values": ["PLANAR", "GEODESIC"], "label": "缓冲方法"},
+        "output_name": {"type": "output_name", "required": false, "default": "buffer"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"distance_unit": true},
+        {"param": "dissolve_option"},
+        {"param": "dissolve_field"},
+        {"param": "method"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "buffer"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "analysis.MultipleRingBuffer": {
+      "label": "多环缓冲 Multiple Ring Buffer",
+      "category": "proximity",
+      "risk": "write_new_output",
+      "parameter_order": ["Input_Features", "Output_Feature_class", "Distances", "Buffer_Unit", "Field_Name", "Dissolve_Option", "Outside_Polygons_Only", "Method"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "distances": {"type": "string", "required": true, "max_length": 512, "pattern": "^[0-9]+(\\.[0-9]+)?(;[0-9]+(\\.[0-9]+)?){0,9}$", "label": "距离列表（分号分隔）"},
+        "unit": {"type": "unit", "required": false, "default": "Meters", "values": ["Meters", "Kilometers", "Feet", "Miles", "Yards", "NauticalMiles", "Millimeters", "Centimeters", "Decimeters", "Inches", "Points", "DecimalDegrees"], "label": "距离单位"},
+        "dissolve_option": {"type": "enum", "required": false, "default": "ALL", "values": ["ALL", "NONE"], "label": "融合选项"},
+        "outside_only": {"type": "enum", "required": false, "default": "FULL", "values": ["FULL", "OUTSIDE_ONLY"], "label": "仅环外多边形"},
+        "method": {"type": "enum", "required": false, "default": "PLANAR", "values": ["PLANAR", "GEODESIC"], "label": "缓冲方法"},
+        "output_name": {"type": "output_name", "required": false, "default": "ringbuffer"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"param": "distances"},
+        {"param": "unit"},
+        {"literal": null},
+        {"param": "dissolve_option"},
+        {"param": "outside_only"},
+        {"param": "method"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "ringbuffer"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "management.Dissolve": {
+      "label": "融合 Dissolve",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "dissolve_field", "statistics_fields", "multi_part", "unsplit_lines"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "dissolve_field": {"type": "field_list", "dataset_param": "input_path", "required": false, "max_items": 8, "label": "融合字段"},
+        "statistics_fields": {"type": "statistics_fields", "required": false, "label": "统计字段（如 test_id SUM）"},
+        "multi_part": {"type": "enum", "required": false, "default": "MULTI_PART", "values": ["MULTI_PART", "SINGLE_PART"], "label": "多部件"},
+        "unsplit_lines": {"type": "enum", "required": false, "default": "DISSOLVE_LINES", "values": ["UNSPLIT_LINES", "DISSOLVE_LINES"], "label": "线打断"},
+        "output_name": {"type": "output_name", "required": false, "default": "dissolve"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"param": "dissolve_field"},
+        {"param": "statistics_fields"},
+        {"param": "multi_part"},
+        {"param": "unsplit_lines"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "dissolve"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "analysis.PairwiseDissolve": {
+      "label": "融合 Pairwise Dissolve",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "dissolve_field", "statistics_fields", "multi_part"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "dissolve_field": {"type": "field_list", "dataset_param": "input_path", "required": false, "max_items": 8, "label": "融合字段"},
+        "statistics_fields": {"type": "statistics_fields", "required": false, "label": "统计字段（如 test_id SUM）"},
+        "multi_part": {"type": "enum", "required": false, "default": "MULTI_PART", "values": ["MULTI_PART", "SINGLE_PART"], "label": "多部件"},
+        "output_name": {"type": "output_name", "required": false, "default": "dissolve"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"param": "dissolve_field"},
+        {"param": "statistics_fields"},
+        {"param": "multi_part"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "dissolve"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "analysis.Intersect": {
+      "label": "相交 Intersect",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "join_attributes", "cluster_tolerance", "output_type"],
+      "params": {
+        "input_paths": {"type": "dataset_list", "role": "input", "required": true, "min_items": 2, "max_items": 8, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素列表"},
+        "join_attributes": {"type": "enum", "required": false, "default": "ALL", "values": ["ALL", "NO_FID", "ONLY_FID"], "label": "连接属性"},
+        "output_type": {"type": "enum", "required": false, "default": "INPUT", "values": ["INPUT", "LINE", "POINT"], "label": "输出类型"},
+        "output_name": {"type": "output_name", "required": false, "default": "intersect"}
+      },
+      "arguments": [
+        {"param": "input_paths"},
+        {"generated_output": true},
+        {"param": "join_attributes"},
+        {"literal": null},
+        {"param": "output_type"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "intersect"},
+      "environment": {"output_crs_from": "input_paths"},
+      "requires_same_gcs": true
+    },
+    "analysis.PairwiseIntersect": {
+      "label": "相交 Pairwise Intersect",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "join_attributes", "cluster_tolerance", "output_type", "precision"],
+      "params": {
+        "input_paths": {"type": "dataset_list", "role": "input", "required": true, "min_items": 2, "max_items": 8, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素列表"},
+        "join_attributes": {"type": "enum", "required": false, "default": "ALL", "values": ["ALL", "NO_FID", "ONLY_FID"], "label": "连接属性"},
+        "output_type": {"type": "enum", "required": false, "default": "INPUT", "values": ["INPUT", "LINE", "POINT"], "label": "输出类型"},
+        "output_name": {"type": "output_name", "required": false, "default": "intersect"}
+      },
+      "arguments": [
+        {"param": "input_paths"},
+        {"generated_output": true},
+        {"param": "join_attributes"},
+        {"literal": null},
+        {"param": "output_type"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "intersect"},
+      "environment": {"output_crs_from": "input_paths"},
+      "requires_same_gcs": true
+    },
+    "analysis.Union": {
+      "label": "联合 Union",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "join_attributes", "cluster_tolerance", "gaps"],
+      "params": {
+        "input_paths": {"type": "dataset_list", "role": "input", "required": true, "min_items": 2, "max_items": 8, "geometry": ["Polygon"], "label": "输入面要素列表"},
+        "join_attributes": {"type": "enum", "required": false, "default": "ALL", "values": ["ALL", "NO_FID", "ONLY_FID"], "label": "连接属性"},
+        "output_name": {"type": "output_name", "required": false, "default": "union"}
+      },
+      "arguments": [
+        {"param": "input_paths"},
+        {"generated_output": true},
+        {"param": "join_attributes"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "union"},
+      "environment": {"output_crs_from": "input_paths"},
+      "requires_same_gcs": true
+    },
+    "analysis.Erase": {
+      "label": "擦除 Erase",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "erase_features", "out_feature_class", "cluster_tolerance"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "erase_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "擦除面要素"},
+        "output_name": {"type": "output_name", "required": false, "default": "erase"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"param": "erase_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "erase"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": true
+    },
+    "analysis.PairwiseErase": {
+      "label": "擦除 Pairwise Erase",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "erase_features", "out_feature_class", "cluster_tolerance"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "erase_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "擦除面要素"},
+        "output_name": {"type": "output_name", "required": false, "default": "erase"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"param": "erase_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "erase"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": true
+    },
+    "analysis.Identity": {
+      "label": "标识 Identity",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "identity_features", "out_feature_class", "join_attributes", "cluster_tolerance", "relationship"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "identity_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "标识面要素"},
+        "join_attributes": {"type": "enum", "required": false, "default": "ALL", "values": ["ALL", "NO_FID", "ONLY_FID"], "label": "连接属性"},
+        "output_name": {"type": "output_name", "required": false, "default": "identity"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"param": "identity_path"},
+        {"generated_output": true},
+        {"param": "join_attributes"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "identity"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": true
+    },
+    "analysis.SymDiff": {
+      "label": "对称差 Symmetrical Difference",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "update_features", "out_feature_class", "join_attributes", "cluster_tolerance"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "update_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "更新要素"},
+        "join_attributes": {"type": "enum", "required": false, "default": "ALL", "values": ["ALL", "NO_FID", "ONLY_FID"], "label": "连接属性"},
+        "output_name": {"type": "output_name", "required": false, "default": "symdiff"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"param": "update_path"},
+        {"generated_output": true},
+        {"param": "join_attributes"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "symdiff"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": true
+    },
+    "analysis.SpatialJoin": {
+      "label": "空间连接 Spatial Join",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["target_features", "join_features", "out_feature_class", "join_operation", "join_type", "field_mapping", "match_option", "search_radius", "distance_field_name"],
+      "params": {
+        "target_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "目标要素"},
+        "join_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "连接要素"},
+        "join_operation": {"type": "enum", "required": false, "default": "JOIN_ONE_TO_ONE", "values": ["JOIN_ONE_TO_ONE", "JOIN_ONE_TO_MANY"], "label": "连接操作"},
+        "join_type": {"type": "enum", "required": false, "default": "KEEP_ALL", "values": ["KEEP_ALL", "KEEP_COMMON"], "label": "连接类型"},
+        "match_option": {"type": "enum", "required": false, "default": "INTERSECT", "values": ["INTERSECT", "WITHIN", "CONTAINS", "CLOSEST", "ARE_IDENTICAL_TO", "BOUNDARY_TOUCHES", "SHARE_A_LINE_SEGMENT_WITH", "CROSSED_BY_THE_OUTLINE_OF", "HAVE_THEIR_CENTER_IN", "WITHIN_A_DISTANCE"], "label": "匹配选项"},
+        "search_distance": {"type": "string", "required": false, "max_length": 128, "pattern": "^[0-9]+(\\.[0-9]+)? [A-Za-z]+$", "label": "搜索距离（如 100 Meters）"},
+        "output_name": {"type": "output_name", "required": false, "default": "spatialjoin"}
+      },
+      "arguments": [
+        {"param": "target_path"},
+        {"param": "join_path"},
+        {"generated_output": true},
+        {"param": "join_operation"},
+        {"param": "join_type"},
+        {"literal": null},
+        {"param": "match_option"},
+        {"param": "search_distance"},
+        {"literal": null}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "spatialjoin"},
+      "environment": {"output_crs_from": "target_path"},
+      "requires_same_gcs": true
+    },
+    "management.MinimumBoundingGeometry": {
+      "label": "最小包围几何 Minimum Bounding Geometry",
+      "category": "overlay",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "geometry_type", "group_option", "group_field", "mbg_fields_option"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "geometry_type": {"type": "enum", "required": false, "default": "ENVELOPE", "values": ["ENVELOPE", "RECTANGLE_BY_AREA", "RECTANGLE_BY_WIDTH", "CONVEX_HULL", "CIRCLE"], "label": "几何类型"},
+        "group_option": {"type": "enum", "required": false, "default": "NONE", "values": ["NONE", "ALL", "LIST"], "label": "分组选项"},
+        "group_field": {"type": "field", "dataset_param": "input_path", "required": false, "label": "分组字段"},
+        "output_name": {"type": "output_name", "required": false, "default": "mbg"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"param": "geometry_type"},
+        {"param": "group_option"},
+        {"param": "group_field"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "mbg"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "management.FeatureToPoint": {
+      "label": "要素转点 Feature to Point",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "point_location"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "输入面要素"},
+        "point_location": {"type": "enum", "required": false, "default": "INSIDE", "values": ["INSIDE", "CENTROID"], "label": "点位置"},
+        "output_name": {"type": "output_name", "required": false, "default": "point"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"param": "point_location"}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "point"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "management.PolygonToLine": {
+      "label": "面转线 Polygon to Line",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "neighbor_option"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "输入面要素"},
+        "output_name": {"type": "output_name", "required": false, "default": "line"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "line"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "management.FeatureToLine": {
+      "label": "面转线 Feature to Line",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "cluster_tolerance", "attributes"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Polygon"], "label": "输入面要素"},
+        "output_name": {"type": "output_name", "required": false, "default": "line"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "line"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "management.MultipartToSinglepart": {
+      "label": "多部件转单部件 Multipart to Singlepart",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "output_name": {"type": "output_name", "required": false, "default": "singlepart"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "singlepart"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "management.Project": {
+      "label": "投影 Project",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["in_dataset", "out_dataset", "out_coor_system", "transform_method", "in_coor_system", "preserve_shape", "max_deviation", "vertical"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "target_wkid": {"type": "wkid", "required": true, "min": 1024, "max": 1000000, "label": "目标坐标系 WKID"},
+        "transform_method": {"type": "string", "required": false, "max_length": 256, "label": "地理变换（可选）"},
+        "preserve_shape": {"type": "enum", "required": false, "default": null, "values": ["PRESERVE_SHAPE", "NO_PRESERVE_SHAPE"], "label": "保持形状"},
+        "output_name": {"type": "output_name", "required": false, "default": "project"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"spatial_reference": {"param": "target_wkid"}},
+        {"param": "transform_method"},
+        {"literal": null},
+        {"param": "preserve_shape"},
+        {"literal": null},
+        {"literal": null}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "project"},
+      "environment": {"output_crs_from": null},
+      "requires_same_gcs": false
+    },
+    "management.Merge": {
+      "label": "合并 Merge",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["inputs", "output", "field_mappings", "add_source", "field_match_mode"],
+      "params": {
+        "input_paths": {"type": "dataset_list", "role": "input", "required": true, "min_items": 1, "max_items": 8, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素列表"},
+        "output_name": {"type": "output_name", "required": false, "default": "merge"}
+      },
+      "arguments": [
+        {"param": "input_paths"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "merge"},
+      "environment": {"output_crs_from": "input_paths"},
+      "requires_same_gcs": true
+    },
+    "management.CopyFeatures": {
+      "label": "复制要素 Copy Features",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["in_features", "out_feature_class", "config_keyword"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "output_name": {"type": "output_name", "required": false, "default": "copy"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true}
+      ],
+      "output": {"kind": "feature_class", "name_param": "output_name", "default_name": "copy"},
+      "environment": {"output_crs_from": "input_path"},
+      "requires_same_gcs": false
+    },
+    "conversion.FeatureClassToGeodatabase": {
+      "label": "要素类转地理数据库 Feature Class to Geodatabase",
+      "category": "conversion",
+      "risk": "write_new_output",
+      "parameter_order": ["Input_Features", "Output_Geodatabase"],
+      "params": {
+        "input_paths": {"type": "dataset_list", "role": "input", "required": true, "min_items": 1, "max_items": 8, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素列表"}
+      },
+      "arguments": [
+        {"param": "input_paths"},
+        {"generated_gdb": true}
+      ],
+      "output": {"kind": "feature_classes"},
+      "environment": {"output_crs_from": "input_paths"},
+      "requires_same_gcs": false
+    },
+    "analysis.Statistics": {
+      "label": "汇总统计 Summary Statistics",
+      "category": "attribute",
+      "risk": "write_new_output",
+      "parameter_order": ["in_table", "out_table", "statistics_fields", "case_field", "concatenation_separator"],
+      "params": {
+        "input_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "输入要素"},
+        "statistics_fields": {"type": "statistics_fields", "required": true, "label": "统计字段（如 test_id SUM）"},
+        "case_field": {"type": "field_list", "dataset_param": "input_path", "required": false, "max_items": 4, "label": "分组字段"},
+        "output_name": {"type": "output_name", "required": false, "default": "statistics"}
+      },
+      "arguments": [
+        {"param": "input_path"},
+        {"generated_output": true},
+        {"param": "statistics_fields"},
+        {"param": "case_field"}
+      ],
+      "output": {"kind": "table", "name_param": "output_name", "default_name": "statistics"},
+      "environment": {"output_crs_from": null},
+      "requires_same_gcs": false
+    },
+    "management.SelectLayerByAttribute": {
+      "label": "按属性选择 Select Layer by Attribute",
+      "category": "selection",
+      "risk": "read_only",
+      "parameter_order": ["in_layer_or_view", "selection_type", "where_clause", "invert_where_clause"],
+      "params": {
+        "layer_id": {"type": "map_layer", "required": true, "label": "目标图层 layer_id"},
+        "selection_type": {"type": "enum", "required": false, "default": "NEW_SELECTION", "values": ["NEW_SELECTION", "ADD_TO_SELECTION", "REMOVE_FROM_SELECTION", "SUBSET_SELECTION", "SWITCH_SELECTION", "CLEAR_SELECTION"], "label": "选择类型"},
+        "where_clause": {"type": "string", "required": false, "max_length": 4096, "label": "SQL WHERE 子句"},
+        "invert_where_clause": {"type": "enum", "required": false, "default": "NON_INVERT", "values": ["NON_INVERT", "INVERT"], "label": "反转条件"}
+      },
+      "arguments": [
+        {"param": "layer_id"},
+        {"param": "selection_type"},
+        {"param": "where_clause"},
+        {"param": "invert_where_clause"}
+      ],
+      "output": {"kind": "selection"},
+      "environment": null,
+      "requires_same_gcs": false
+    },
+    "management.SelectLayerByLocation": {
+      "label": "按位置选择 Select Layer by Location",
+      "category": "selection",
+      "risk": "read_only",
+      "parameter_order": ["in_layer", "overlap_type", "select_features", "search_distance", "selection_type", "invert_spatial_relationship"],
+      "params": {
+        "layer_id": {"type": "map_layer", "required": true, "label": "目标图层 layer_id"},
+        "overlap_type": {"type": "enum", "required": false, "default": "INTERSECT", "values": ["INTERSECT", "WITHIN", "CONTAINS", "WITHIN_A_DISTANCE", "ARE_IDENTICAL_TO", "BOUNDARY_TOUCHES", "SHARE_A_LINE_SEGMENT_WITH", "HAVE_THEIR_CENTER_IN"], "label": "空间关系"},
+        "select_features_path": {"type": "dataset", "role": "input", "required": true, "geometry": ["Point", "Multipoint", "Polyline", "Polygon"], "label": "选择依据要素"},
+        "search_distance": {"type": "string", "required": false, "max_length": 128, "pattern": "^[0-9]+(\\.[0-9]+)? [A-Za-z]+$", "label": "搜索距离（如 100 Meters）"},
+        "selection_type": {"type": "enum", "required": false, "default": "NEW_SELECTION", "values": ["NEW_SELECTION", "ADD_TO_SELECTION", "REMOVE_FROM_SELECTION", "SUBSET_SELECTION", "SWITCH_SELECTION"], "label": "选择类型"},
+        "invert_spatial_relationship": {"type": "enum", "required": false, "default": "NOT_INVERT", "values": ["NOT_INVERT", "INVERT"], "label": "反转空间关系"}
+      },
+      "arguments": [
+        {"param": "layer_id"},
+        {"param": "overlap_type"},
+        {"param": "select_features_path"},
+        {"param": "search_distance"},
+        {"param": "selection_type"},
+        {"param": "invert_spatial_relationship"}
+      ],
+      "output": {"kind": "selection"},
+      "environment": null,
+      "requires_same_gcs": false
+    }
+  }
+}

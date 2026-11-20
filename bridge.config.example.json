@@ -1,0 +1,7 @@
+{
+  "runtime_root": "C:/GIS-Agent/runtime",
+  "state_root": "C:/GIS-Agent/runtime/state",
+  "output_root": "C:/GIS-Agent/runtime/outputs",
+  "gp_catalog_path": "C:/GIS-Agent/runtime/gp_catalog.json",
+  "arcgis_pro_exe": "C:/Program Files/ArcGIS/Pro/bin/ArcGISPro.exe"
+}

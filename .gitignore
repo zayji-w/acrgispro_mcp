@@ -1,0 +1,22 @@
+# Per-user settings, runtime and output
+bridge.config.json
+.venv/
+runtime/
+state/
+outputs/
+artifacts/
+release/
+*.esriAddinX
+*.zip
+.env
+.env.*
+
+# Python and .NET generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo

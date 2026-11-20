@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+ <ItemGroup>
+  <Compile Include="../../Native/Contracts.cs" Link="Contracts.cs"/>
+  <Compile Include="../../Native/PresentationSpec.cs" Link="PresentationSpec.cs"/>
+  <Compile Include="../../Native/LayoutEditSpec.cs" Link="LayoutEditSpec.cs"/>
+  <Compile Include="../../Native/PathPolicy.cs" Link="PathPolicy.cs"/>
+  <Compile Include="../../Native/RasterSpec.cs" Link="RasterSpec.cs"/>
+  <Compile Include="../../Native/ThematicSpec.cs" Link="ThematicSpec.cs"/>
+  <Compile Include="../../Native/JobManager.cs" Link="JobManager.cs"/>
+  <Compile Include="../../Native/GpCatalog.cs" Link="GpCatalog.cs"/>
+ </ItemGroup>
+</Project>
+

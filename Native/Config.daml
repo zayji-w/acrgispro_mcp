@@ -1,0 +1,21 @@
+<ArcGIS defaultAssembly="SafeBridge.Native.dll" defaultNamespace="SafeBridge.Native" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AddInInfo id="{9db0f962-d76c-47bf-9130-f59f68f9b4bd}" version="0.6.7" desktopVersion="3.7" product="ArcGISPro">
+    <Name>acrgispro_mcp</Name>
+    <Description>Native GIS MCP: vector loading, dataset inspection, catalog-driven geoprocessing (overlay, proximity, conversion, statistics, selection) with asynchronous jobs and map binding. No arbitrary code or project save.</Description>
+    <Author>Local GIS Tools</Author><Company>Local</Company><Date>2026-10-16</Date><Subject>Framework</Subject>
+  </AddInInfo>
+  <modules>
+    <insertModule id="SafeGISBridge_Module" className="BridgeModule" autoLoad="true" caption="Safe GIS Bridge">
+      <groups>
+        <group id="SafeGISBridge_Group" caption="Safe GIS Bridge" appearsOnAddInTab="true">
+          <button refID="SafeGISBridge_Start" size="large"/><button refID="SafeGISBridge_Stop" size="large"/>
+        </group>
+      </groups>
+      <controls>
+        <button id="SafeGISBridge_Start" caption="Start bridge" className="StartButton" loadOnClick="true"><tooltip heading="Start bridge">Enable the local allowlisted GIS bridge.<disabledText/></tooltip></button>
+        <button id="SafeGISBridge_Stop" caption="Stop bridge" className="StopButton" loadOnClick="true"><tooltip heading="Stop bridge">Disable bridge requests without closing the map.<disabledText/></tooltip></button>
+      </controls>
+    </insertModule>
+  </modules>
+</ArcGIS>
+

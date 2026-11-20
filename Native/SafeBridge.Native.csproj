@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>SafeBridge.Native</AssemblyName>
+    <RootNamespace>SafeBridge.Native</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <Version>0.6.7</Version>
+    <PathMap>$(MSBuildProjectDirectory)=/_/Native</PathMap>
+    <ProInstallDir Condition="'$(ProInstallDir)' == ''">$(ProgramW6432)\ArcGIS\Pro</ProInstallDir>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ArcGIS.Core"><HintPath>$(ProInstallDir)\bin\ArcGIS.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ArcGIS.Desktop.Framework"><HintPath>$(ProInstallDir)\bin\ArcGIS.Desktop.Framework.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ArcGIS.Desktop.Core"><HintPath>$(ProInstallDir)\bin\Extensions\Core\ArcGIS.Desktop.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ArcGIS.Desktop.Catalog"><HintPath>$(ProInstallDir)\bin\Extensions\Catalog\ArcGIS.Desktop.Catalog.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ArcGIS.Desktop.Mapping"><HintPath>$(ProInstallDir)\bin\Extensions\Mapping\ArcGIS.Desktop.Mapping.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ArcGIS.Desktop.Layouts"><HintPath>$(ProInstallDir)\bin\Extensions\Layout\ArcGIS.Desktop.Layouts.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>
+
